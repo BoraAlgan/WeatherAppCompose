@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -23,12 +24,21 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.weatherappcompose.R
 import com.example.weatherappcompose.ui.theme.BackGroundColorEnd
 import com.example.weatherappcompose.ui.theme.BackGroundColorStart
 
 @Composable
-fun WeatherScreen() {
+fun WeatherScreen(weatherScreenViewModel: WeatherScreenViewModel = viewModel()) {
+
+    LaunchedEffect(weatherScreenViewModel) {
+        weatherScreenViewModel.mystate.collect { _ ->
+
+
+
+        }
+    }
 
     Column(
         modifier = Modifier

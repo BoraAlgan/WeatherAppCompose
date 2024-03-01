@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id ("kotlin-kapt")
 }
 
 android {
@@ -66,6 +67,29 @@ dependencies {
 
     //navigation
     implementation ("androidx.navigation:navigation-compose:2.7.7")
+
+    //hilt-dagger
+    kapt ("com.google.dagger:hilt-compiler:2.44.2")
+    implementation ("com.google.dagger:hilt-android:2.44")
+
+    //retrofit
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.11.0")
+
+    // GSON
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    //lifecycle
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
+
+    //location
+    implementation ("com.google.android.gms:play-services-location:21.1.0")
+
+    //room
+    //noinspection KaptUsageInsteadOfKsp
+    kapt ("androidx.room:room-compiler:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+
 
 
 }
