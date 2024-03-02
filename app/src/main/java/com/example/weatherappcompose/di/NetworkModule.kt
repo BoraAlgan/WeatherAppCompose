@@ -1,7 +1,7 @@
-package com.example.weatherappcompose
+package com.example.weatherappcompose.di
 
 import com.example.weatherappcompose.interceptor.ApiKeyInterceptor
-import com.example.weatherappcompose.remote.api.WeatherApiClient
+import com.example.weatherappcompose.data.remote.api.WeatherApiClient
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

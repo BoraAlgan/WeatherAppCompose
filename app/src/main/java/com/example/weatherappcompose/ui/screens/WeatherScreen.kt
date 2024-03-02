@@ -15,28 +15,44 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.weatherappcompose.R
 import com.example.weatherappcompose.ui.theme.BackGroundColorEnd
 import com.example.weatherappcompose.ui.theme.BackGroundColorStart
 
 @Composable
-fun WeatherScreen(weatherScreenViewModel: WeatherScreenViewModel = viewModel()) {
+fun WeatherScreen(weatherScreenViewModel: WeatherScreenViewModel) {
 
-    LaunchedEffect(weatherScreenViewModel) {
-        weatherScreenViewModel.mystate.collect { _ ->
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val weatherResponseState = weatherScreenViewModel.mystate.collectAsStateWithLifecycle()
 
 
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_CREATE) {
+                weatherScreenViewModel.fetchWeatherData("İstanbul")
+            }
+        }
 
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
 
@@ -54,7 +70,7 @@ fun WeatherScreen(weatherScreenViewModel: WeatherScreenViewModel = viewModel()) 
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("Location", fontSize = 30.sp)
+            Text(weatherResponseState.value.name.toString(), fontSize = 30.sp)
             Text("Updated at: 11.02.2024 19.47 PM")
         }
 
