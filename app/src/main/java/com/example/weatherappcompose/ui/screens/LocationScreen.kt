@@ -12,6 +12,4 @@ fun LocationScreen(locationScreenViewModel: LocationScreenViewModel) {
     val locationResponseState = locationScreenViewModel.mystate.collectAsStateWithLifecycle()
 
 
-
-
 }
