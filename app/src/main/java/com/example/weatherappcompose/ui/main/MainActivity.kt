@@ -13,10 +13,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.weatherappcompose.ui.screens.LocationScreen
+import com.example.weatherappcompose.ui.screens.LocationScreenViewModel
 import com.example.weatherappcompose.ui.screens.WeatherScreen
 import com.example.weatherappcompose.ui.screens.WeatherScreenViewModel
 import com.example.weatherappcompose.ui.theme.WeatherAppComposeTheme
@@ -45,7 +47,8 @@ class MainActivity : ComponentActivity() {
                     composable(
                         route = "locationScreen"
                     ){
-                        LocationScreen()
+                        val viewModel: LocationScreenViewModel = hiltViewModel()
+                        LocationScreen(viewModel)
                     }
 
 
