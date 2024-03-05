@@ -34,7 +34,9 @@ class MainActivity : ComponentActivity() {
 
 
 
-            Scaffold(topBar = {}, bottomBar = {}) {
+            Scaffold(topBar = {}, bottomBar = { NavigationComponent(navController = controller)}) {
+
+
 
                 NavHost(startDestination = "weatherScreen", modifier = Modifier.padding(it), navController = controller) {
 

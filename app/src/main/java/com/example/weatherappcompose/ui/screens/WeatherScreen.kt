@@ -55,6 +55,8 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.weatherappcompose.R
+import com.example.weatherappcompose.extentions.capitalizeWords
+import com.example.weatherappcompose.extentions.epochToDateTime
 import com.example.weatherappcompose.ui.theme.BackGroundColorEnd
 import com.example.weatherappcompose.ui.theme.BackGroundColorImage
 import com.example.weatherappcompose.ui.theme.BackGroundColorStart
@@ -153,7 +155,8 @@ fun WeatherScreen(weatherScreenViewModel: WeatherScreenViewModel) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 val celcTemp = stringResource(id = R.string.celcius_temp, weatherResponseState.value.main?.temp?.roundToInt().toString())
-                Text(celcTemp, color = Color.White, fontSize = 70.sp, modifier = Modifier.padding(30.dp))
+                Text(celcTemp, color = Color.White, fontSize = 70.sp, modifier = Modifier.padding(top = 30.dp))
+                Text(weatherResponseState.value.weather?.firstOrNull()?.description?.capitalizeWords() ?: "Clean Weather", color = Color.White, fontSize = 20.sp, modifier = Modifier.padding(bottom = 20.dp))
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -188,7 +191,7 @@ fun WeatherScreen(weatherScreenViewModel: WeatherScreenViewModel) {
                         contentDescription = ""
                     )
                     Text("Sunrise", color = Color.White)
-                    Text("5.30", color = Color.White)
+                    Text(weatherResponseState.value.sys?.sunrise?.epochToDateTime() ?: "", color = Color.White)
 
                 }
                 Column(
@@ -207,7 +210,7 @@ fun WeatherScreen(weatherScreenViewModel: WeatherScreenViewModel) {
                         contentDescription = ""
                     )
                     Text("Sunset", color = Color.White)
-                    Text("5.30", color = Color.White)
+                    Text(weatherResponseState.value.sys?.sunset?.epochToDateTime() ?: "", color = Color.White)
 
                 }
                 Column(
@@ -226,7 +229,7 @@ fun WeatherScreen(weatherScreenViewModel: WeatherScreenViewModel) {
                         colorFilter = ColorFilter.tint(Color.White)
                     )
                     Text("Wind", color = Color.White)
-                    Text("5.30", color = Color.White)
+                    Text(weatherResponseState.value.wind?.speed.toString(), color = Color.White)
 
                 }
             }
@@ -250,7 +253,7 @@ fun WeatherScreen(weatherScreenViewModel: WeatherScreenViewModel) {
                         contentDescription = ""
                     )
                     Text("Pressure", color = Color.White)
-                    Text("5.30", color = Color.White)
+                    Text(weatherResponseState.value.main?.pressure.toString(), color = Color.White)
 
                 }
                 Column(
@@ -267,7 +270,7 @@ fun WeatherScreen(weatherScreenViewModel: WeatherScreenViewModel) {
                         contentDescription = ""
                     )
                     Text("Pressure", color = Color.White)
-                    Text("5.30", color = Color.White)
+                    Text(weatherResponseState.value.main?.humidity.toString(), color = Color.White)
                 }
                 Column(
                     modifier = Modifier
@@ -283,7 +286,7 @@ fun WeatherScreen(weatherScreenViewModel: WeatherScreenViewModel) {
                         modifier = Modifier.size(25.dp)
                     )
                     Text("Pressure", color = Color.White)
-                    Text("5.30", color = Color.White)
+                    Text(weatherResponseState.value.main?.seaLevel.toString(), color = Color.White)
                 }
             }
         }
