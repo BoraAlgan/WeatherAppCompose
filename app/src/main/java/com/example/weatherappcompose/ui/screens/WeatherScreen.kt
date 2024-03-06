@@ -150,7 +150,7 @@ fun WeatherScreen(weatherScreenViewModel: WeatherScreenViewModel) {
         Column() {
             Column(
                 modifier = Modifier
-                    .padding(top = 100.dp)
+                    .padding(top = 50.dp)
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -172,7 +172,7 @@ fun WeatherScreen(weatherScreenViewModel: WeatherScreenViewModel) {
 
             Row(
                 modifier = Modifier
-                    .padding(top = 80.dp)
+                    .padding(top = 20.dp)
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {

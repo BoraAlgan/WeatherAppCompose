@@ -3,6 +3,8 @@ package com.example.weatherappcompose.ui.main
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -10,6 +12,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -32,24 +36,29 @@ class MainActivity : ComponentActivity() {
 
             val controller = rememberNavController()
 
+            val toolbarTitleState = remember { mutableStateOf("WeatherScreen") }
 
 
-            Scaffold(topBar = {}, bottomBar = { NavigationComponent(navController = controller)}) {
-
+            Scaffold(
+                topBar = {
+                    ToolbarComponent(controller = controller, title = toolbarTitleState.value) },
+                bottomBar = { NavigationComponent(navController = controller) }) {
 
 
                 NavHost(startDestination = "weatherScreen", modifier = Modifier.padding(it), navController = controller) {
 
                     composable(
-                        route = "weatherScreen"
-                    ){
+                        route = "weatherScreen",
+                    ) {
                         val viewModel: WeatherScreenViewModel = hiltViewModel()
+                        toolbarTitleState.value = "Weather"
                         WeatherScreen(viewModel)
                     }
                     composable(
-                        route = "locationScreen"
-                    ){
+                        route = "locationScreen",
+                    ) {
                         val viewModel: LocationScreenViewModel = hiltViewModel()
+                        toolbarTitleState.value = "Locations"
                         LocationScreen(viewModel)
                     }
 
