@@ -1,6 +1,5 @@
-package com.example.weatherappcompose.ui.main
+package com.example.weatherappcompose.ui.components
 
-import android.icu.text.CaseMap.Title
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -38,18 +37,18 @@ fun NavigationComponent(
 
     NavigationBar {
 
-        list.forEach {item ->
+        list.forEach { item ->
 
             NavigationBarItem(
                 selected = currentRoute == item.route,
                 onClick = {
-                          navController.navigate(item.route)
+                    navController.navigate(item.route)
                 },
                 icon = {
                     Icon(
                         painter = painterResource(id = item.icon),
                         contentDescription = "",
-                        modifier = Modifier.size(if(currentRoute == item.route) 26.dp else 22.dp)
+                        modifier = Modifier.size(if (currentRoute == item.route) 26.dp else 22.dp)
                     )
                 },
                 label = {
@@ -57,7 +56,7 @@ fun NavigationComponent(
                         text = item.title,
                         fontWeight = if (currentRoute == item.route) FontWeight.Bold else FontWeight.Normal,
                         fontSize = if (currentRoute == item.route) 16.sp else 12.sp
-                        )
+                    )
                 }
             )
 

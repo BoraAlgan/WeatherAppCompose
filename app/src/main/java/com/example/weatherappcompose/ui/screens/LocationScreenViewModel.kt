@@ -2,8 +2,10 @@ package com.example.weatherappcompose.ui.screens
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.weatherappcompose.data.remote.domain.WeatherUseCase
-import com.example.weatherappcompose.data.remote.model.WeatherResponseModel
+import com.example.weatherappcompose.data.locale.SavedLocations
+import com.example.weatherappcompose.data.locale.domain.DeleteUseCase
+import com.example.weatherappcompose.data.locale.domain.GetAllUseCase
+import com.example.weatherappcompose.data.locale.domain.InsertUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,45 +16,51 @@ import javax.inject.Inject
 @HiltViewModel
 class LocationScreenViewModel @Inject constructor(
 
-    private val useCase: WeatherUseCase,
+    private val getAllUseCase: GetAllUseCase,
+    private val insertUseCase: InsertUseCase,
+    private val deleteUseCase: DeleteUseCase
 
 
+) : ViewModel() {
 
-    ) : ViewModel() {
-
-    private val _myState = MutableStateFlow(WeatherResponseModel())
-    val mystate: StateFlow<WeatherResponseModel> = _myState.asStateFlow()
+    private val _myState = MutableStateFlow<List<SavedLocations>>(emptyList())
+    val mystate: StateFlow<List<SavedLocations>> = _myState.asStateFlow()
 
 
-    fun fetchWeatherData(query: String) {
+    fun getAllLocations() {
+        getAllUseCase.getAllData(
+            onFailure = {
 
-        useCase.fetchWeatherData(
-            query,
+            },
             onSuccess = {
                 _myState.value = it
-            },
-            onFailure = {
-//                toastMessage.value = it
             }
         )
             .launchIn(viewModelScope)
     }
 
-    fun fetchWeatherWithCordData(lat: Double, lon: Double,locationName: String) {
-
-        useCase.fetchWeatherWithCordData(
-            lat,
-            lon,
+    fun insertUseCase(location: SavedLocations) {
+        insertUseCase.insertData(
+            locations = location,
+            onFailure = {},
             onSuccess = {
-                it.name = locationName
-                _myState.value = it
-            },
-            onFailure = {
-                println("HATA $it")
+                getAllLocations()
+            }
+        )
+            .launchIn(viewModelScope)
+
+    }
+
+    fun deleteLocation(location: SavedLocations) {
+        deleteUseCase.deleteData(
+            locations = location,
+            onFailure = {},
+            onSuccess = {
+                getAllLocations()
             }
         )
             .launchIn(viewModelScope)
     }
+}
 
 
-    }
