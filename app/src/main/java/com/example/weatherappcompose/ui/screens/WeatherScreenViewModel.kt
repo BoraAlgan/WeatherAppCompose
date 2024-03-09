@@ -1,5 +1,7 @@
 package com.example.weatherappcompose.ui.screens
 
+import android.content.SharedPreferences
+import androidx.core.content.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherappcompose.data.remote.domain.WeatherUseCase
@@ -16,6 +18,7 @@ class WeatherScreenViewModel @Inject constructor(
 
     private val useCase: WeatherUseCase,
 
+    private val preferences: SharedPreferences
 
 
     ) : ViewModel() {
@@ -23,6 +26,7 @@ class WeatherScreenViewModel @Inject constructor(
 //    private val _myState = MutableStateFlow<WeatherResponseModel?>(WeatherResponseModel())
     private val _myState = MutableStateFlow(WeatherResponseModel())
     val mystate: StateFlow<WeatherResponseModel> = _myState.asStateFlow()
+
 
 
     fun fetchWeatherData(query: String) {
@@ -55,5 +59,28 @@ class WeatherScreenViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
+     fun putPreferences(value: String) {
+        preferences.edit {
+            putString(CITY, value)
+        }
+        fetchWeatherData(value)
+    }
+
+     fun checkQuery(onPreferencesNull: () -> Unit) {
+        val city = getPreferences(CITY)
+        if (city == null) {
+            onPreferencesNull()
+        } else {
+            fetchWeatherData(city)
+        }
+    }
+
+    private fun getPreferences(value: String): String? {
+        return preferences.getString(value, null)
+    }
+
+    companion object {
+        private val CITY = "city"
+    }
 
 }

@@ -4,7 +4,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.Icon
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
@@ -12,11 +11,9 @@ import android.location.LocationManager
 import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,16 +22,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -44,19 +37,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.content.ContextCompat.getString
-import androidx.core.content.ContextCompat.startActivity
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.weatherappcompose.R
 import com.example.weatherappcompose.extentions.capitalizeWords
 import com.example.weatherappcompose.extentions.epochToDateTime
+import com.example.weatherappcompose.ui.components.AlertDialogAddLocation
 import com.example.weatherappcompose.ui.theme.BackGroundColorEnd
 import com.example.weatherappcompose.ui.theme.BackGroundColorImage
 import com.example.weatherappcompose.ui.theme.BackGroundColorStart
@@ -71,7 +58,10 @@ import kotlin.math.roundToInt
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun WeatherScreen(weatherScreenViewModel: WeatherScreenViewModel) {
+fun WeatherScreen(
+    weatherScreenViewModel: WeatherScreenViewModel,
+    locationShowState: MutableState<Boolean>
+) {
 
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
@@ -79,10 +69,14 @@ fun WeatherScreen(weatherScreenViewModel: WeatherScreenViewModel) {
     val finePermissionState = rememberPermissionState(permission = Manifest.permission.ACCESS_FINE_LOCATION)
     val coarsePermissionState = rememberPermissionState(permission = Manifest.permission.ACCESS_COARSE_LOCATION)
 
+
+
     val locationPermissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { isGranted ->
         //mapdeki herhangi bir izin verilmediyse if bloğu, verildi ise else bloğu dönecek
         if (isGranted.containsValue(false)) {
-
+            weatherScreenViewModel.checkQuery {
+                locationShowState.value = true
+            }
         } else {
             startLocationUpdates(context) { lat, lon, locationName ->
                 weatherScreenViewModel.fetchWeatherWithCordData(lat, lon, locationName)
@@ -100,7 +94,9 @@ fun WeatherScreen(weatherScreenViewModel: WeatherScreenViewModel) {
             }
 
             finePermissionState.status.shouldShowRationale && coarsePermissionState.status.shouldShowRationale -> {
-                //dialog basılacak
+                weatherScreenViewModel.checkQuery {
+                    locationShowState.value = true
+                }
             }
 
             else -> {
@@ -114,19 +110,19 @@ fun WeatherScreen(weatherScreenViewModel: WeatherScreenViewModel) {
         }
     }
 
-    DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_CREATE) {
-
-            }
-        }
-
-        lifecycleOwner.lifecycle.addObserver(observer)
-
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-        }
-    }
+//    DisposableEffect(lifecycleOwner) {
+//        val observer = LifecycleEventObserver { _, event ->
+//            if (event == Lifecycle.Event.ON_CREATE) {
+//
+//            }
+//        }
+//
+//        lifecycleOwner.lifecycle.addObserver(observer)
+//
+//        onDispose {
+//            lifecycleOwner.lifecycle.removeObserver(observer)
+//        }
+//    }
 
     Column(
         modifier = Modifier
@@ -292,6 +288,20 @@ fun WeatherScreen(weatherScreenViewModel: WeatherScreenViewModel) {
         }
 
     }
+
+    if (locationShowState.value) {
+        AlertDialogAddLocation(
+            onDismissRequest = { locationShowState.value = false },
+            onConfirmation = {
+                weatherScreenViewModel.putPreferences(it)
+                locationShowState.value = false
+            },
+            dialogTitle = "Deneme",
+            dialogText = "Lütfen buraya girin",
+            icon = Icons.Default.Info
+        )
+    }
+
 }
 
 

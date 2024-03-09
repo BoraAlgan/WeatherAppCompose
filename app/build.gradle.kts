@@ -1,8 +1,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id ("kotlin-kapt")
-    id ("com.google.dagger.hilt.android")
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -67,42 +67,41 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     //navigation
-    implementation ("androidx.navigation:navigation-compose:2.5.3")
+    implementation("androidx.navigation:navigation-compose:2.5.3")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
 
     //hilt-dagger
-    kapt ("com.google.dagger:hilt-compiler:2.48.1")
-    implementation ("com.google.dagger:hilt-android:2.48.1")
+    kapt("com.google.dagger:hilt-compiler:2.48.1")
+    implementation("com.google.dagger:hilt-android:2.48.1")
 
     //retrofit
-    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation ("com.squareup.okhttp3:logging-interceptor:4.11.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
 
     // GSON
-    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
     //lifecycle
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
 
     //location
-    implementation ("com.google.android.gms:play-services-location:21.1.0")
+    implementation("com.google.android.gms:play-services-location:21.1.0")
 
     //room
     //noinspection KaptUsageInsteadOfKsp
-    kapt ("androidx.room:room-compiler:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
 
     //permission library
-    implementation ("com.google.accompanist:accompanist-permissions:0.35.0-alpha")
+    implementation("com.google.accompanist:accompanist-permissions:0.35.0-alpha")
 
     //material3
-    implementation ("androidx.compose.material3:material3:1.2.1")
+    implementation("androidx.compose.material3:material3:1.2.1")
 
-
-
-
+    //preferences
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 
 
 }

@@ -1,5 +1,7 @@
 package com.example.weatherappcompose.ui.screens
 
+import android.content.SharedPreferences
+import androidx.core.content.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weatherappcompose.data.locale.SavedLocations
@@ -18,14 +20,15 @@ class LocationScreenViewModel @Inject constructor(
 
     private val getAllUseCase: GetAllUseCase,
     private val insertUseCase: InsertUseCase,
-    private val deleteUseCase: DeleteUseCase
+    private val deleteUseCase: DeleteUseCase,
+
+    private val preferences: SharedPreferences
 
 
 ) : ViewModel() {
 
     private val _myState = MutableStateFlow<List<SavedLocations>>(emptyList())
     val mystate: StateFlow<List<SavedLocations>> = _myState.asStateFlow()
-
 
     fun getAllLocations() {
         getAllUseCase.getAllData(
@@ -61,6 +64,17 @@ class LocationScreenViewModel @Inject constructor(
         )
             .launchIn(viewModelScope)
     }
+
+    fun putPreferences(value: String) {
+        preferences.edit {
+            putString(CITY, value)
+        }
+    }
+
+    companion object {
+        private val CITY = "city"
+    }
+
 }
 
 

@@ -1,5 +1,8 @@
 package com.example.weatherappcompose.ui.components
 
+import android.content.Context
+import android.media.MediaPlayer
+import android.view.SoundEffectConstants
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,6 +16,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.weatherappcompose.R
@@ -25,8 +30,15 @@ fun LocationCardView(
     onDeleteClick: (SavedLocations) -> Unit,
 
     ) {
+    val context = LocalContext.current
+    val cardClickSound = LocalView.current
+    val deleteClickSound : MediaPlayer = MediaPlayer.create(context,R.raw.delete_button)
 
-    Card {
+    Card(
+        modifier = Modifier.padding(horizontal = 5.dp, vertical = 5.dp,).clickable {
+            cardClickSound.playSoundEffect(SoundEffectConstants.CLICK)
+        }
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -47,6 +59,8 @@ fun LocationCardView(
                     .size(24.dp)
                     .clickable {
                         onDeleteClick.invoke(data)
+                        deleteClickSound.start()
+
                     },
                 painter = painterResource(id = R.drawable.ic_location_delete),
                 contentDescription = "IconDelete"

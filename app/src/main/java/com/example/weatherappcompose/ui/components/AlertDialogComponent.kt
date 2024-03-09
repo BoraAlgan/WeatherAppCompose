@@ -4,18 +4,24 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 
 import androidx.compose.ui.graphics.vector.ImageVector
 
 @Composable
-fun AlertDialogExample(
+fun AlertDialogAddLocation(
     onDismissRequest: () -> Unit,
-    onConfirmation: () -> Unit,
+    onConfirmation: (String) -> Unit,
     dialogTitle: String,
     dialogText: String,
     icon: ImageVector,
 ) {
+
+    val inputState = remember { mutableStateOf("") }
+
     AlertDialog(
         icon = {
             Icon(icon, contentDescription = "Example Icon")
@@ -24,7 +30,9 @@ fun AlertDialogExample(
             Text(text = dialogTitle)
         },
         text = {
-            Text(text = dialogText)
+            TextField(value = inputState.value, onValueChange = {
+                inputState.value = it
+            })
         },
         onDismissRequest = {
             onDismissRequest()
@@ -32,7 +40,7 @@ fun AlertDialogExample(
         confirmButton = {
             TextButton(
                 onClick = {
-                    onConfirmation()
+                    onConfirmation(inputState.value)
                 }
             ) {
                 Text("Confirm")
