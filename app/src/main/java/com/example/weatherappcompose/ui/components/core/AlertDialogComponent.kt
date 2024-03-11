@@ -1,4 +1,4 @@
-package com.example.weatherappcompose.ui.components
+package com.example.weatherappcompose.ui.components.core
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon

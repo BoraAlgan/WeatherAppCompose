@@ -13,8 +13,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.weatherappcompose.ui.components.NavigationComponent
-import com.example.weatherappcompose.ui.components.ToolbarComponent
+import com.example.weatherappcompose.ui.components.core.NavigationComponent
+import com.example.weatherappcompose.ui.components.core.ToolbarComponent
 import com.example.weatherappcompose.ui.screens.LocationScreen
 import com.example.weatherappcompose.ui.screens.LocationScreenViewModel
 import com.example.weatherappcompose.ui.screens.WeatherScreen
@@ -37,6 +37,8 @@ class MainActivity : ComponentActivity() {
             val locationSaveDialogState = remember { mutableStateOf(false) }
             val weatherShowDialogState = remember { mutableStateOf(false) }
 
+            val weatherSwitchState = remember { mutableStateOf(false) }
+
 
             Scaffold(
                 topBar = {
@@ -53,7 +55,9 @@ class MainActivity : ComponentActivity() {
                                     locationSaveDialogState.value = true
                                 }
                             }
-                        })
+                        },
+                        onSwitched = weatherSwitchState
+                    )
                 },
                 bottomBar = { NavigationComponent(navController = controller) }) {
 
@@ -65,14 +69,14 @@ class MainActivity : ComponentActivity() {
                     ) {
                         val viewModel: WeatherScreenViewModel = hiltViewModel()
                         toolbarTitleState.value = "Weather"
-                        WeatherScreen(viewModel, weatherShowDialogState)
+                        WeatherScreen(viewModel, weatherShowDialogState, weatherSwitchState)
                     }
                     composable(
                         route = "locationScreen",
                     ) {
                         val viewModel: LocationScreenViewModel = hiltViewModel()
                         toolbarTitleState.value = "Locations"
-                        LocationScreen(viewModel, locationSaveDialogState, controller)
+                        LocationScreen(viewModel, locationSaveDialogState, controller, weatherSwitchState)
                     }
                 }
             }

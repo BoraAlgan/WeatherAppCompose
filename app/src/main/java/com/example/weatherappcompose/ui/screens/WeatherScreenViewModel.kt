@@ -23,9 +23,8 @@ class WeatherScreenViewModel @Inject constructor(
 
     ) : ViewModel() {
 
-//    private val _myState = MutableStateFlow<WeatherResponseModel?>(WeatherResponseModel())
-    private val _myState = MutableStateFlow(WeatherResponseModel())
-    val mystate: StateFlow<WeatherResponseModel> = _myState.asStateFlow()
+    private val _myState = MutableStateFlow<WeatherResponseModel?>(null)
+    val mystate: StateFlow<WeatherResponseModel?> = _myState.asStateFlow()
 
 
 

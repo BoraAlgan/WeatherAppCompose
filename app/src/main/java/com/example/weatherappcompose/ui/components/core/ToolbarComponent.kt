@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.example.weatherappcompose.ui.components
+package com.example.weatherappcompose.ui.components.core
 
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -9,6 +9,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
@@ -17,15 +20,17 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.weatherappcompose.R
+import com.example.weatherappcompose.ui.components.base.SwitchButton
 import com.example.weatherappcompose.ui.theme.ToolbarColor
 
 @Composable
 fun ToolbarComponent(
     title: String,
     controller: NavHostController,
-    onActionClick: () -> (Unit)
+    onActionClick: () -> (Unit),
+    onSwitched: MutableState<Boolean>,
 
-) {
+    ) {
 
     val navBackStackEntry = controller.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry.value?.destination?.route
@@ -36,7 +41,7 @@ fun ToolbarComponent(
             Text(text = title)
         },
         navigationIcon = {
-
+            SwitchButton(onSwitched)
         },
         actions = {
             IconButton(

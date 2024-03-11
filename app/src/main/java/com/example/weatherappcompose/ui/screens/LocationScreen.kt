@@ -7,7 +7,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -16,14 +15,15 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.weatherappcompose.data.locale.SavedLocations
-import com.example.weatherappcompose.ui.components.AlertDialogAddLocation
-import com.example.weatherappcompose.ui.components.LocationCardView
+import com.example.weatherappcompose.ui.components.core.AlertDialogAddLocation
+import com.example.weatherappcompose.ui.components.core.LocationCardView
 
 @Composable
 fun LocationScreen(
     locationScreenViewModel: LocationScreenViewModel,
     locationSaveState: MutableState<Boolean>,
-    navController: NavHostController
+    navController: NavHostController,
+    switchState: MutableState<Boolean>
 ) {
 
 
@@ -54,6 +54,7 @@ fun LocationScreen(
                 data = it,
                 onItemClick = { navigateLocationName ->
 
+                    switchState.value = false
                     locationScreenViewModel.putPreferences(navigateLocationName)
                     navController.navigateUp()
 

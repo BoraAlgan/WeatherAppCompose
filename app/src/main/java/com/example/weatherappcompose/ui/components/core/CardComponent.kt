@@ -1,4 +1,4 @@
-package com.example.weatherappcompose.ui.components
+package com.example.weatherappcompose.ui.components.core
 
 import android.content.Context
 import android.media.MediaPlayer
