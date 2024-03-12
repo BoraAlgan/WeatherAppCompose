@@ -21,11 +21,20 @@ class WeatherScreenViewModel @Inject constructor(
     private val preferences: SharedPreferences
 
 
-    ) : ViewModel() {
+) : ViewModel() {
 
     private val _myState = MutableStateFlow<WeatherResponseModel?>(null)
     val mystate: StateFlow<WeatherResponseModel?> = _myState.asStateFlow()
 
+    private val _errorState = MutableStateFlow<Boolean>(false)
+    val errorState: StateFlow<Boolean> = _errorState.asStateFlow()
+
+    fun disableErrorState() {
+        _errorState.value = false
+        preferences.edit {
+            remove(CITY)
+        }
+    }
 
 
     fun fetchWeatherData(query: String) {
@@ -36,13 +45,13 @@ class WeatherScreenViewModel @Inject constructor(
                 _myState.value = it
             },
             onFailure = {
-//                toastMessage.value = it
+                _errorState.value = true
             }
         )
             .launchIn(viewModelScope)
     }
 
-    fun fetchWeatherWithCordData(lat: Double, lon: Double,locationName: String) {
+    fun fetchWeatherWithCordData(lat: Double, lon: Double, locationName: String) {
 
         useCase.fetchWeatherWithCordData(
             lat,
@@ -58,14 +67,14 @@ class WeatherScreenViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
-     fun putPreferences(value: String) {
+    fun putPreferences(value: String) {
         preferences.edit {
             putString(CITY, value)
         }
         fetchWeatherData(value)
     }
 
-     fun checkQuery(onPreferencesNull: () -> Unit) {
+    fun checkQuery(onPreferencesNull: () -> Unit) {
         val city = getPreferences(CITY)
         if (city == null) {
             onPreferencesNull()

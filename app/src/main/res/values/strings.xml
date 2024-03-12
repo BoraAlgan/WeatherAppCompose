@@ -13,4 +13,8 @@
     <string name="edit_location">edit_location</string>
     <string name="my_locations">My Locations</string>
     <string name="weather">Weather</string>
+
+    <string name="unvalid_location_dialog_title">Unvalid Location</string>
+    <string name="unvalid_location_dialog_text">Please enter a valid location</string>
+
 </resources>

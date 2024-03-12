@@ -24,6 +24,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -67,6 +69,7 @@ fun WeatherScreen(
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
     val weatherResponseState = weatherScreenViewModel.mystate.collectAsStateWithLifecycle()
+    val weatherErrorState = weatherScreenViewModel.errorState.collectAsStateWithLifecycle()
     val finePermissionState = rememberPermissionState(permission = Manifest.permission.ACCESS_FINE_LOCATION)
     val coarsePermissionState = rememberPermissionState(permission = Manifest.permission.ACCESS_COARSE_LOCATION)
 
@@ -118,7 +121,7 @@ fun WeatherScreen(
 
     }
 
-    if(weatherResponseState.value != null) {
+    if (weatherResponseState.value != null) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -315,6 +318,25 @@ fun WeatherScreen(
             dialogTitle = "Deneme",
             dialogText = "Lütfen buraya girin",
             icon = Icons.Default.Info
+        )
+    }
+
+    if (weatherErrorState.value) {
+        AlertDialog(
+            onDismissRequest = { weatherScreenViewModel.disableErrorState() },
+            title = {
+                Text(stringResource(id = R.string.unvalid_location_dialog_title))
+
+            },
+            text = {
+                Text(stringResource(id = R.string.unvalid_location_dialog_text))
+            },
+            confirmButton = {
+                Button(onClick = { weatherScreenViewModel.disableErrorState() }) {
+                    Text(text = "Ok")
+                }
+            }
+
         )
     }
 
